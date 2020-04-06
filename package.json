@@ -3,5 +3,9 @@
   "private": true,
   "engines": {
     "node": "12.x"
+  },
+  "devDependencies": {
+    "@types/node": "^13.11.0",
+    "typescript": "^3.8.3"
   }
 }
