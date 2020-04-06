@@ -1,7 +1,7 @@
 const fs = require("fs")
-const merge = require("webpack-merge")
 const path = require("path")
-const { HotModuleReplacementPlugin } = require("webpack")
+const { DefinePlugin, HotModuleReplacementPlugin } = require("webpack")
+const merge = require("webpack-merge")
 const common = require("./webpack.common")
 
 const config = merge.smart(common, {
@@ -21,7 +21,21 @@ const config = merge.smart(common, {
       },
     ],
   },
-  plugins: [new HotModuleReplacementPlugin()],
+  plugins: [
+    new HotModuleReplacementPlugin(),
+    new DefinePlugin({
+      FIREBASE_CONFIG: JSON.stringify({
+        apiKey: "AIzaSyBtRqFW8yZu43-kyWq2SV49r5njLnprv8g",
+        authDomain: "issho-ni-dev.firebaseapp.com",
+        databaseURL: "https://issho-ni-dev.firebaseio.com",
+        projectId: "issho-ni-dev",
+        storageBucket: "issho-ni-dev.appspot.com",
+        messagingSenderId: "267256160713",
+        appId: "1:267256160713:web:99d50ebb4c2d8a144ac818",
+        measurementId: "G-YS3VY3041R",
+      }),
+    }),
+  ],
 })
 
 try {
