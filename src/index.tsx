@@ -8,9 +8,11 @@ document.body.prepend(app)
 
 ReactDOM.render(
   <React.StrictMode>
-    <SessionProvider>
-      <App />
-    </SessionProvider>
+    <React.Suspense fallback="Loading...">
+      <SessionProvider>
+        <App />
+      </SessionProvider>
+    </React.Suspense>
   </React.StrictMode>,
   app
 )

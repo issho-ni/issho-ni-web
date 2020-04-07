@@ -1,10 +1,18 @@
 import * as React from "react"
 import { BrowserRouter } from "react-router-dom"
 import { ProtectedRoute } from "../../components/ProtectedRoute"
-import { Dashboard } from "../../pages/Dashboard"
-import { SignIn } from "../../pages/SignIn"
 import { useFirebase } from "../Firebase"
 import { useSession } from "../Session"
+
+const Dashboard = React.lazy(() =>
+  import("../../pages/Dashboard").then((module) => ({
+    default: module.Dashboard,
+  }))
+)
+
+const SignIn = React.lazy(() =>
+  import("../../pages/SignIn").then((module) => ({ default: module.SignIn }))
+)
 
 export const App = () => {
   const app = useFirebase()
