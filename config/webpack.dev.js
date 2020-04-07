@@ -1,3 +1,4 @@
+const firebase = require("firebase")
 const fs = require("fs")
 const path = require("path")
 const { DefinePlugin, HotModuleReplacementPlugin } = require("webpack")
@@ -34,6 +35,10 @@ const config = merge.smart(common, {
         appId: "1:267256160713:web:99d50ebb4c2d8a144ac818",
         measurementId: "G-YS3VY3041R",
       }),
+      FIREBASE_SIGN_IN_OPTIONS: JSON.stringify([
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      ]),
     }),
   ],
 })

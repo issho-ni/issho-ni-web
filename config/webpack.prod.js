@@ -1,3 +1,4 @@
+const firebase = require("firebase")
 const MiniCSSExtractPlugin = require("mini-css-extract-plugin")
 const { DefinePlugin } = require("webpack")
 const merge = require("webpack-merge")
@@ -33,6 +34,10 @@ module.exports = merge.smart(common, {
         appId: "1:145168256109:web:4d7e4c3e0c875752a10364",
         measurementId: "G-7CV701T0T6",
       }),
+      FIREBASE_SIGN_IN_OPTIONS: JSON.stringify([
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      ]),
     }),
   ],
 })
