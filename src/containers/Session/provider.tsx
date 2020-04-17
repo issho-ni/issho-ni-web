@@ -2,10 +2,14 @@ import * as React from "react"
 import { useFirebase } from "../Firebase"
 import { Session, SessionContext } from "./context"
 
-type SessionProviderProps = Omit<Session, "isLoggedIn">
+type SessionProviderProps = Omit<Session, "initialized" | "isLoggedIn">
 
-const sessionReducer = (session: Session, user: firebase.User) => ({
+const sessionReducer: React.Reducer<Session, firebase.User> = (
+  session,
+  user
+) => ({
   ...session,
+  initialized: true,
   isLoggedIn: !!user,
 })
 
@@ -18,16 +22,18 @@ export const SessionProvider = ({
   const [session, dispatch] = React.useReducer(sessionReducer, {
     basePath,
     signInPath,
+    initialized: false,
     isLoggedIn: false,
   })
 
   const handleAuthStateChanged = (user: firebase.User) => {
-    !!user !== session.isLoggedIn && dispatch(user)
+    dispatch(user)
   }
 
-  React.useEffect(() => app.auth().onAuthStateChanged(handleAuthStateChanged), [
-    session,
-  ])
+  React.useEffect(
+    () => app.auth().onAuthStateChanged(handleAuthStateChanged),
+    []
+  )
 
   return (
     <SessionContext.Provider value={session}>

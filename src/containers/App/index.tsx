@@ -16,9 +16,9 @@ const SignIn = React.lazy(() =>
 
 export const App = () => {
   const app = useFirebase()
-  const { isLoggedIn } = useSession()
+  const { initialized, isLoggedIn } = useSession()
 
-  return (
+  return initialized ? (
     <>
       {isLoggedIn && (
         <>
@@ -33,5 +33,7 @@ export const App = () => {
         <ProtectedRoute path="/sign-in" component={SignIn} />
       </BrowserRouter>
     </>
+  ) : (
+    <div>Initializing…</div>
   )
 }

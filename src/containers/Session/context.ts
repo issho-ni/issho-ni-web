@@ -3,6 +3,7 @@ import { Context, createContext, useContext } from "react"
 export interface Session {
   basePath?: string
   signInPath?: string
+  initialized: boolean
   isLoggedIn: boolean
 }
 
