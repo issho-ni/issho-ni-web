@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "issho-ni-dev",
+    "production": "issho-ni"
+  }
+}
