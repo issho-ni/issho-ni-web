@@ -8,7 +8,7 @@ export const Dashboard = () => {
   const app = useFirebase()
   const [showCompleted, setShowCompleted] = React.useState(false)
   const [tasks, setTasks] = React.useState<TaskModel[]>([])
-  const { handleSubmit, register } = useForm()
+  const { handleSubmit, register, reset } = useForm()
 
   const uid = app.auth().currentUser.uid
 
@@ -24,11 +24,15 @@ export const Dashboard = () => {
     []
   )
 
-  const onSubmit = (data: TaskModelProps) =>
+  const onSubmit = (data: TaskModelProps) => {
+    reset()
     new TaskModel(app.firestore(), {
       uid,
       ...data,
-    }).save()
+    })
+      .save()
+      .catch(() => reset(data))
+  }
 
   return (
     <>
