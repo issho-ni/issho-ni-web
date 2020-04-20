@@ -6,6 +6,9 @@
   },
   "scripts": {
     "build": "webpack --config config/webpack.prod.js",
+    "deploy": "firebase deploy",
+    "deploy:indexes": "firebase deploy --only firestore:indexes",
+    "deploy:rules": "firebase deploy --only firestore:rules",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "start": "webpack-dev-server --config config/webpack.dev.js"
   },
