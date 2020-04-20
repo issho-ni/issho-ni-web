@@ -42,7 +42,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-firebaseui": "^4.1.0",
-    "react-hook-form": "^5.4.2",
+    "react-hook-form": "^5.5.1",
     "react-router-dom": "^5.1.2"
   }
 }
