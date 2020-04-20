@@ -6,6 +6,7 @@ import { TaskModel, TaskModelProps } from "../../models/Task"
 
 export const Dashboard = () => {
   const app = useFirebase()
+  const [showCompleted, setShowCompleted] = React.useState(false)
   const [tasks, setTasks] = React.useState<TaskModel[]>([])
   const { handleSubmit, register } = useForm()
 
@@ -15,9 +16,10 @@ export const Dashboard = () => {
     () =>
       TaskModel.collection(app.firestore())
         .where("uid", "==", uid)
+        .orderBy("completedAt")
         .orderBy("createdAt")
         .onSnapshot((snapshot) =>
-          setTasks([...tasks, ...snapshot.docs.map((doc) => doc.data())])
+          setTasks(snapshot.docs.map((doc) => doc.data()))
         ),
     []
   )
@@ -31,12 +33,21 @@ export const Dashboard = () => {
   return (
     <>
       <h1>Dashboard</h1>
+      <input
+        type="checkbox"
+        id="showCompleted"
+        defaultChecked={showCompleted}
+        onChange={(e) => setShowCompleted(e.target.checked)}
+      />
+      <label htmlFor="showCompleted">Show completed</label>
       <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <Task {...{ task }} />
-          </li>
-        ))}
+        {tasks
+          .filter((task) => showCompleted || !task.completedAt)
+          .map((task) => (
+            <li key={task.id}>
+              <Task {...{ task }} />
+            </li>
+          ))}
       </ul>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input type="text" name="name" ref={register({ required: true })} />
