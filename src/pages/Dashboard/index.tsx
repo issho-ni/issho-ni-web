@@ -15,6 +15,7 @@ export const Dashboard = () => {
     () =>
       TaskModel.collection(app.firestore())
         .where("uid", "==", uid)
+        .orderBy("createdAt")
         .onSnapshot((snapshot) =>
           setTasks([...tasks, ...snapshot.docs.map((doc) => doc.data())])
         ),
