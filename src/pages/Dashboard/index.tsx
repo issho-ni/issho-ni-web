@@ -2,7 +2,7 @@ import * as React from "react"
 import { useForm } from "react-hook-form"
 import { Task } from "../../components/Task"
 import { useFirebase } from "../../containers/Firebase"
-import { TaskModel, TaskModelProps } from "../../models/Task"
+import { TaskModel, TaskModelProps } from "../../models/TaskModel"
 
 export const Dashboard = () => {
   const app = useFirebase()
