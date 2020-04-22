@@ -34,6 +34,8 @@ export class TaskModel extends Model<TaskModelProps, TaskModel>
   }
 
   set completed(completed: boolean) {
-    this.completedAt = completed ? new Date() : null
+    if (this.completed != completed) {
+      this.completedAt = completed ? new Date() : null
+    }
   }
 }
