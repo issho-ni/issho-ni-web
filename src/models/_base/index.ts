@@ -34,7 +34,7 @@ export abstract class Model<P extends ModelProps, T extends BaseModel<P>>
     Object.keys(this._data).forEach((key) =>
       Object.defineProperty(this, key, {
         get: () => this._data[key],
-        set: (value: any) => (this._data[key] = value),
+        set: (value) => (this._data[key] = value),
       })
     )
   }
