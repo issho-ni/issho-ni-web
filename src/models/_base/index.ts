@@ -59,7 +59,7 @@ export abstract class Model<P extends ModelProps, T extends BaseModel<P>>
   }
 }
 
-const modelConverter = <P extends ModelProps, T extends BaseModel<P>>(
+export const modelConverter = <P extends ModelProps, T extends BaseModel<P>>(
   db: firestore.Firestore,
   t: ModelClass<P, T>
 ): firestore.FirestoreDataConverter<T> => ({
