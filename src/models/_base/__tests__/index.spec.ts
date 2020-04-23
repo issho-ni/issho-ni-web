@@ -1,4 +1,7 @@
-import { QueryDocumentSnapshot } from "@google-cloud/firestore"
+import {
+  DocumentSnapshot,
+  QueryDocumentSnapshot,
+} from "@google-cloud/firestore"
 import firebase, { firestore } from "firebase"
 import {
   Collection,
@@ -53,20 +56,57 @@ describe("Model", () => {
       const db = firebase.firestore()
       const collection = db.collection("test")
       const doc = collection.doc("id")
+      const set = jest.spyOn(doc, "set")
 
-      doc.set = jest.fn()
-      collection.doc = jest.fn().mockReturnValue(doc)
-      db.collection = jest.fn().mockReturnValue(collection)
+      jest.spyOn(collection, "doc").mockReturnValueOnce(doc)
 
       const test = new TestModel(db, { name: "some name" })
       test.save()
 
-      expect(doc.set).toHaveBeenCalledWith({
+      expect(set).toHaveBeenCalledWith({
         createdAt: expect.any(Date),
         id: "id",
         name: "some name",
         updatedAt: expect.any(Date),
       })
+    })
+
+    it("overrides updatedAt but not createdAt", async () => {
+      const db = firebase.firestore()
+      const collection = db.collection("test")
+      const doc = collection.doc("id")
+
+      const snap = Object.create(DocumentSnapshot.prototype)
+      let data
+
+      const set = jest.spyOn(doc, "set").mockImplementationOnce((d, _) => {
+        data = d
+        return Promise.resolve()
+      })
+      jest.spyOn(snap, "data").mockImplementationOnce(() => data)
+      jest.spyOn(doc, "get").mockImplementationOnce(() => Promise.resolve(snap))
+
+      jest.spyOn(collection, "doc").mockReturnValueOnce(doc)
+      jest.spyOn(collection, "doc").mockReturnValueOnce(doc)
+
+      const createdAt = new Date("2019-01-01T00:00Z")
+      const updatedAt = new Date("2019-02-01T00:00Z")
+      const test = new TestModel(firebase.firestore(), {
+        createdAt,
+        id: "1234",
+        name: "some name",
+        updatedAt,
+      })
+      await test.save()
+
+      expect(set).toHaveBeenCalledWith({
+        createdAt,
+        id: "1234",
+        name: "some name",
+        updatedAt: expect.any(Date),
+      })
+
+      expect(test.updatedAt.getTime()).toBeGreaterThan(updatedAt.getTime())
     })
   })
 })

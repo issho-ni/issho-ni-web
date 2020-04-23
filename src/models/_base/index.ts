@@ -1,4 +1,4 @@
-import { firestore } from "firebase"
+import firebase, { firestore } from "firebase"
 
 type BaseModel<P extends ModelProps> = Model<P, BaseModel<P>> & P
 
@@ -47,15 +47,20 @@ export abstract class Model<P extends ModelProps, T extends BaseModel<P>>
     return this._data
   }
 
-  save() {
-    const now = new Date()
-    return this.rawCollection()
-      .doc(this.id)
-      .set({ createdAt: now, ...this.data, updatedAt: now })
+  async save() {
+    await this.doc.set({
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      ...this.data,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+
+    const saved = await this.doc.get()
+    const data = saved.data()
+    Object.assign(this._data, data as P)
   }
 
-  private rawCollection() {
-    return this.db.collection(this.klass.collectionName)
+  private get doc() {
+    return this.db.collection(this.klass.collectionName).doc(this.id)
   }
 }
 
