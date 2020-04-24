@@ -11,15 +11,17 @@ export const Task = ({ task }: TaskProps) => {
     task.save()
   }
 
+  const id = `task-${task.id}`
+
   return (
     <>
       <input
-        id={`task-${task.id}`}
+        id={id}
         type="checkbox"
         defaultChecked={task.completed}
         onChange={onChange}
       />
-      <label htmlFor={`task-${task.id}`}>{task.name}</label>
+      <label htmlFor={id}>{task.name}</label>
     </>
   )
 }
