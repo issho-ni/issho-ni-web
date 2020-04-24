@@ -52,16 +52,26 @@ describe("Model", () => {
   })
 
   describe("save", () => {
-    it("passes the document properties to set()", () => {
+    it("passes the document properties to set()", async () => {
       const db = firebase.firestore()
       const collection = db.collection("test")
       const doc = collection.doc("id")
-      const set = jest.spyOn(doc, "set")
 
+      const snap = Object.create(DocumentSnapshot.prototype)
+      let data
+
+      const set = jest.spyOn(doc, "set").mockImplementationOnce((d, _) => {
+        data = d
+        return Promise.resolve()
+      })
+      jest.spyOn(snap, "data").mockImplementationOnce(() => data)
+      jest.spyOn(doc, "get").mockImplementationOnce(() => Promise.resolve(snap))
+
+      jest.spyOn(collection, "doc").mockReturnValueOnce(doc)
       jest.spyOn(collection, "doc").mockReturnValueOnce(doc)
 
       const test = new TestModel(db, { name: "some name" })
-      test.save()
+      await test.save()
 
       expect(set).toHaveBeenCalledWith({
         createdAt: expect.any(Date),
